@@ -1,0 +1,56 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+li {
+  list-style: none;
+}
+#container {
+  width: 200px;
+  height: 300px;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+}
+#list {
+  position: absolute;
+  width: 700%;
+}
+#list img{
+  width: 200px;
+  height: 300px;
+  float: left;
+}
+#btns {
+  position: absolute;
+  left: 30%;
+  bottom: 10px;
+}
+#btns li {
+  width: 6px;
+  height: 6px;
+  margin-left: 8px;
+  float: left;
+  background-color: #fff;
+}
+#btns li:hover {
+  cursor: pointer;
+}
+#btns .show-btn {
+  background-color: #505050;
+}
+#prev,#next {
+  height: 300px;
+  width: 10px;
+  opacity: .7;
+  position: absolute;
+  cursor: pointer;
+  line-height: 200px;
+  background-color: rgb(150, 150, 150)
+}
+#next,#prev:hover {
+  opacity: 1;
+}
+#next {
+  right: 0;
+}

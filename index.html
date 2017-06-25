@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>轮播图</title>
+  <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+  <div id="container">
+    <div id="list" style="left:-200px">
+      <img src="./img/5.jpg" alt="">
+      <img src="./img/1.jpg" alt="">
+      <img src="./img/2.jpg" alt="">
+      <img src="./img/3.jpg" alt="">
+      <img src="./img/4.jpg" alt="">
+      <img src="./img/5.jpg" alt="">
+      <img src="./img/1.jpg" alt="">
+    </div>
+    <div id="btns">
+      <ul>
+        <li index="1" class="show-btn"></li>
+        <li index="2"></li>
+        <li index="3"></li>
+        <li index="4"></li>
+        <li index="5"></li>
+      </ul>
+    </div>
+    <div id="prev"><</div>
+    <div id="next">></div>
+  </div>
+
+  <script>
+    window.onload = function () {
+      var container = document.getElementById('container')
+      var list = document.getElementById('list')
+      var btns = document.querySelectorAll('#btns li')
+      var prev = document.getElementById('prev')
+      var next = document.getElementById('next')
+      var dot = 1
+      var interval = 3000
+      var animated = false  //动画的初始状态
+      var timer
+      function showBtn() {
+        for (var i = 0; i < btns.length; i++) {
+          if (btns[i].className == 'show-btn') {
+            btns[i].className = ''
+            break
+          }
+        }
+        btns[dot-1].className = 'show-btn'
+      }
+
+      function animate(leng) {
+        animated = true
+        var newList = parseInt(list.style.left) + leng
+        var time = 300  //位移总时间
+        var interval = 10  //位移时间间隔
+        var speed = leng/(time/interval)  //每次位移量，就是一共调用多少次的意思
+
+        function go() {
+          if ((speed < 0 && parseInt(list.style.left) > newList)
+           || (speed > 0 && parseInt(list.style.left) < newList)) {
+            list.style.left = parseInt(list.style.left) + speed + 'px'
+            setTimeout(go, interval)  //递归,调用自身函数
+          } else {
+            animated = false
+            list.style.left = newList + 'px'
+            if (newList < -1000) {
+              dot = 1
+              list.style.left = -200 + 'px'
+            }
+            if (newList > -200) {
+              dot = 5
+              list.style.left = -1000 + 'px'
+            }
+          }
+        }
+        go()
+      }
+
+      function play() {
+        timer = setTimeout(function() {
+          next.onclick()
+          play()
+        },interval)
+      }
+      function stop() {
+        clearTimeout(timer)
+      }
+      // 后一张图
+      next.onclick = function () {
+        if (animated) {
+          return
+        }
+        if (dot == 5) {
+          dot = 1
+        } else {
+          dot += 1
+        }
+        showBtn()
+        animate(-200)
+      }
+      // 前一张图
+      prev.onclick = function () {
+        if (animated) {
+          return
+        }
+        if (dot == 1) {
+          dot = 5
+        } else {
+          dot -= 1
+        }
+        showBtn()
+        animate(200)
+      }
+      // 小点切换图片
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].onclick = function () {
+          if (animated) {
+            return
+          }
+          if (this.className == 'showBtn') {
+            return
+          }
+          var myIndex = parseInt(this.getAttribute('index'))
+          var leng = -200 * (myIndex - dot)
+          animate(leng)
+          dot = myIndex
+          showBtn()
+        }
+      }
+      container.onmouseover = stop
+      container.onmouseout = play
+    }
+  </script>
+</body>
+</html>
